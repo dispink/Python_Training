@@ -10,15 +10,16 @@ import pandas as pd
 import numpy as np
 from scipy import stats
 import seaborn
+from sklearn.decomposition import PCA
 
-# input source excel            
+## input source excel ##           
 df_data = (pd.read_excel('Results_NK-1-W_3rd_20151008.xls', 'Results_NK-1-W_3rd_20151008', skiprows = 2).
            rename(columns = {"position (mm)" : "position_mm"}).
            dropna()
            )
 df_data.head()
 
-# input master result
+# input master result #
 df_pair = pd.read_csv('NKE-1_clr_cor_compile_0430.csv')
 df_pair.head()
 
@@ -28,7 +29,8 @@ df_pair.head()
 df_data_sel = df_data.loc[ : , ['Si', 'K', 'Ca', 'Ti', 'Cr', 'Br', 'Mn', 'Fe', 'Ni',
                                 'Cu', 'Zn', 'Pb', 'Zr', 'Rb', 'Mo coh']].copy()
 position = df_data['position_mm']
-## replace zero to avoid problems with transform
+
+# replace zero to avoid problems with transform
 #  replace the 0 value with the mean of first 25% observation values in Br & Pb.
 df_data_sel.describe().min()    #only Br and Pb has 0
 
@@ -43,7 +45,7 @@ df_data_sel.Pb = df_data_sel.Pb.replace(
 df_data_sel.describe().min()
 # maybe later can use randomnormal number between 1 and 0.1% (-3std) to replace 0
  
-# centred log-ratio
+## centred log-ratio ##
 df_clr = pd.DataFrame()
 gm = stats.gmean(df_data_sel, axis = 1)
 for nrow in range(len(df_data_sel)):
@@ -62,3 +64,11 @@ diff_Si.plot('hist')        # they are almost identical
 
 sns_plot = seaborn.pairplot(df_clr)
 sns_plot.savefig('NKE-1_pairs.png')        # it's almost identical to the master result
+
+
+
+## PCA ##
+pca = PCA(n_components = 'mle')
+pca.fit(df_clr)
+print(pca.explained_variance_ratio_) 
+
