@@ -9,7 +9,8 @@ pair data:
 import pandas as pd
 import numpy as np
 from scipy import stats
-import seaborn
+import seaborn as sns
+import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 
@@ -63,7 +64,7 @@ clr_df = clr_df[['Si', 'K', 'Ca', 'Ti', 'Cr', 'Br', 'Mn', 'Fe', 'Ni',
 diff_Si = clr_df['Si'] - pair_df['Si']
 diff_Si.plot('hist')        # they are almost identical
 
-sns_plot = seaborn.pairplot(clr_df)
+sns_plot = sns.pairplot(clr_df)
 sns_plot.savefig('NKE-1_pairs.png')        # it's almost identical to the master result
 
 ## PCA ##
@@ -85,4 +86,21 @@ PCs_df = pd.DataFrame(
         data = PCs,
         columns = ['PC1', 'PC2', 'PC3'])
 
+diff_PC = pd.concat(
+        [PCs_df, pair_df.iloc[: , -3:]]
+        , axis=1
+        )
 
+# plot the PCs to know is there any difference between reshow and master result
+diff_PC.plot()
+
+diff_PC.loc[: ,'PC3'].plot()
+
+plt.plot( 'PC1', data=diff_PC, marker='', color='skyblue')
+plt.plot( 'PC2', data=diff_PC, marker='', color='olive')
+plt.plot( 'PC3', data=diff_PC, marker='', color='red')
+plt.legend()
+
+print('PC1 and PC2 are symmetric. PC3 is idendical')
+
+## CA
