@@ -62,3 +62,5 @@ diff_Si.plot('hist')        # they are almost identical
 
 sns_plot = seaborn.pairplot(df_clr)
 sns_plot.savefig('NKE-1_pairs.png')        # it's almost identical to the master result
+
+# PCA
