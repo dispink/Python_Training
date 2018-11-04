@@ -5,25 +5,91 @@ Created on Wed Oct 31 18:01:36 2018
 @author: Arthur
 """
 import os
+from os import listdir
+import platform
+import pandas as pd
+import matplotlib.pyplot as plt
+plt.style.use('ggplot')
+import seaborn as sns
 
-path = 'D:\\Google drive\\Acadamics\\Research\\Methods_BET\\raw'
+# set workinf directory
+if platform.system() == 'Darwin':
+    path = '/Users/DisPink/Google Drive/Acadamics/Research/Methods_BET/raw'
+if platform.system() == 'Windows':
+    path = 'D:\\Google drive\\Acadamics\\Research\\Methods_BET\\raw'
 os.chdir(path)
-#file = input()
-
-input_name = 'OR-S-B1.txt'
-l_start = 0
-pore_distribution = []
-with open(input_name, 'r', errors = 'ignore') as f:      # 有亂碼，直接忽略檔案中的亂碼
-
-    for index, line in enumerate(f):
-        #if line[33 : 49] == 'BET Surface Area':
-            #BET_area = line[ 54: 60]
-        if line[0:32] == 'BJH Adsorption dV/dD Pore Volume':
-            l_start = index  + 4
-        if index >= l_start & index <= l_start + 26:
-            pore_distribution.append(line)
 
 
-test = 'BJH Adsorption dV/dD Pore Volume'
-len(test)
-test[33:49]
+def convert_raw(input_name):
+    
+    l_start = 0
+    pore_distribution = []
+    with open(input_name, 'r', errors = 'ignore') as f:      # 有亂碼，直接忽略檔案中的亂碼
+
+        for index, line in enumerate(f):
+            if line[33 : 49] == 'BET Surface Area':
+                BET_area = line[ 54: 60]
+            if line[0:32] == 'BJH Adsorption dV/dD Pore Volume':
+                l_start = index  + 5
+    
+
+    with open(input_name, 'r', errors = 'ignore') as f:
+        for index, line in enumerate(f):
+            if (index >= l_start) and (index <= l_start + 24):
+                #print(line.split('\t'))
+                pore_distribution.append(line.split('\t'))
+             
+                pore_df = pd.DataFrame(pore_distribution, columns = ['pore_diameter', 'pore_volume'])
+
+    for line in range(len(pore_df)):
+        pore_df.iloc[line, 0] = float(pore_df.iloc[line, 0][:6])
+        pore_df.iloc[line, 1] = float(pore_df.iloc[line, 1][:13])
+        pore_df['sample_ID'] = input_name[:-4]
+        pore_df['BET_area'] = BET_area
+    
+    return pore_df
+
+
+pore_df = pd.DataFrame()
+for i in range( len(listdir()) ):
+    if listdir()[i][-3:] == 'TXT':
+        pore_df = pore_df.append(
+                convert_raw(listdir()[i])
+                )
+# set tyoe for later plotting        
+pore_df['pore_diameter'] = pore_df['pore_diameter'].astype(float)
+pore_df['pore_volume'] = pore_df['pore_volume'].astype(float)
+pore_df['BET_area'] = pore_df['BET_area'].astype(float)      
+
+## plotting
+
+# use seaborn
+ax = sns.lineplot(x = 'pore_diameter',
+                  y = 'pore_volume',
+                  data = pore_df, 
+                  hue = 'sample_ID',
+                  alpha = 0.5)
+ax.set(xlabel = 'pore diameter (nm)', 
+       ylabel = 'pore volume ({})'.format(r'$cm^3 / g \cdot nm $'))
+ax.set_xlim(0, 20)
+ax.figure()
+ax.figure.savefig('pore distribution sns.pdf')
+
+# use matplotlib
+plt.plot(
+        pore_df[pore_df['sample_ID'] == 'OR-S-BC2']['pore_diameter'],
+        pore_df[pore_df['sample_ID'] == 'OR-S-BC2']['pore_volume']
+        )
+
+
+fig, ax = plt.subplots(1, 1, figsize=(12, 9))
+
+pore_df.plot('pore_diameter', 'pore_volume', hue = 'sample_ID')
+plt.text(250, 0.0015, 
+         'BET surface area: {} m2/g'.format(BET_area), 
+         horizontalalignment='right',
+         verticalalignment='bottom')
+plt.savefig('result_{}.pdf'.format(sample_ID))
+
+pore_df['pore_diameter']
+             
