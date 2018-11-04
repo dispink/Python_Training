@@ -63,7 +63,7 @@ pore_df['BET_area'] = pore_df['BET_area'].astype(float)
 
 ## plotting
 
-# use seaborn
+# use seaborn #
 ax = sns.lineplot(x = 'pore_diameter',
                   y = 'pore_volume',
                   data = pore_df, 
@@ -75,21 +75,73 @@ ax.set_xlim(0, 20)
 ax.figure()
 ax.figure.savefig('pore distribution sns.pdf')
 
-# use matplotlib
-plt.plot(
-        pore_df[pore_df['sample_ID'] == 'OR-S-BC2']['pore_diameter'],
-        pore_df[pore_df['sample_ID'] == 'OR-S-BC2']['pore_volume']
-        )
+# use matplotlib #
+# plot the untreated samples
+plt.scatter(
+            pore_df[pore_df['sample_ID'] == 'OR-S-B1']['pore_diameter'],
+            pore_df[pore_df['sample_ID'] == 'OR-S-B1']['pore_volume'],
+            color = 'grey', s = 2, marker = 'o', 
+            label = 'OR-S-B1, {} {}'.format(
+                    pore_df[pore_df['sample_ID'] == 'OR-S-B1'].iloc[1,3],
+                    r'$m^2 / g$')
+            )
+plt.scatter(
+            pore_df[pore_df['sample_ID'] == 'OR-S-B2']['pore_diameter'],
+            pore_df[pore_df['sample_ID'] == 'OR-S-B2']['pore_volume'],
+            color = 'grey', s = 2, marker = '^', 
+            label = 'OR-S-B2, {} {}'.format(
+                    pore_df[pore_df['sample_ID'] == 'OR-S-B2'].iloc[1,3],
+                    r'$m^2 / g$')
+            )
+plt.scatter(
+            pore_df[pore_df['sample_ID'] == 'OR-S-B3']['pore_diameter'],
+            pore_df[pore_df['sample_ID'] == 'OR-S-B3']['pore_volume'],
+            color = 'grey', s = 2, marker = 's', 
+            label = 'OR-S-B3, {} {}'.format(
+                    pore_df[pore_df['sample_ID'] == 'OR-S-B3'].iloc[1,3],
+                    r'$m^2 / g$')
+            )
 
-
-fig, ax = plt.subplots(1, 1, figsize=(12, 9))
-
-pore_df.plot('pore_diameter', 'pore_volume', hue = 'sample_ID')
-plt.text(250, 0.0015, 
-         'BET surface area: {} m2/g'.format(BET_area), 
-         horizontalalignment='right',
-         verticalalignment='bottom')
-plt.savefig('result_{}.pdf'.format(sample_ID))
-
-pore_df['pore_diameter']
-             
+# plot the samples which IC are removed
+plt.scatter(
+            pore_df[pore_df['sample_ID'] == 'OR-S-BC1']['pore_diameter'],
+            pore_df[pore_df['sample_ID'] == 'OR-S-BC1']['pore_volume'],
+            color = 'dodgerblue', s = 2, marker = 'o', 
+            label = 'OR-S-BC1, {} {}'.format(
+                    pore_df[pore_df['sample_ID'] == 'OR-S-BC1'].iloc[1,3],
+                    r'$m^2 / g$')
+            )
+plt.scatter(
+            pore_df[pore_df['sample_ID'] == 'OR-S-BC2']['pore_diameter'],
+            pore_df[pore_df['sample_ID'] == 'OR-S-BC2']['pore_volume'],
+            color = 'dodgerblue', s = 2, marker = '^', 
+            label = 'OR-S-BC2, {} {}'.format(
+                    pore_df[pore_df['sample_ID'] == 'OR-S-BC2'].iloc[1,3],
+                    r'$m^2 / g$')
+            )
+            
+# plot the samples which OC are removed
+plt.scatter(
+            pore_df[pore_df['sample_ID'] == 'OR-S-BCH1']['pore_diameter'],
+            pore_df[pore_df['sample_ID'] == 'OR-S-BCH1']['pore_volume'],
+            color = 'firebrick', s = 2, marker = 'o', 
+            label = 'OR-S-BCH1, {} {}'.format(
+                    pore_df[pore_df['sample_ID'] == 'OR-S-BCH1'].iloc[1,3],
+                    r'$m^2 / g$')
+            )
+plt.scatter(
+            pore_df[pore_df['sample_ID'] == 'OR-S-BCH2']['pore_diameter'],
+            pore_df[pore_df['sample_ID'] == 'OR-S-BCH2']['pore_volume'],
+            color = 'firebrick', s = 2, marker = '^', 
+            label = 'OR-S-BCH2, {} {}'.format(
+                    pore_df[pore_df['sample_ID'] == 'OR-S-BCH2'].iloc[1,3],
+                    r'$m^2 / g$')
+            )
+# settings of the plot
+plt.title('Pore size distribution')
+plt.xlim(0, 35)
+plt.ylim(0, 0.006)
+plt.xlabel('Pore diameter (nm)')
+plt.ylabel('Pore volume ({})'.format(r'$cm^3 / g \cdot nm$'))
+plt.legend(loc='upper right')
+plt.savefig('{}pore_distribution_mat.pdf'.format(path[:-3]))
