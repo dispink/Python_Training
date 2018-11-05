@@ -40,7 +40,7 @@ def FTIR_convector(input_file):
             wv_list.append(float(wv))
             int_list.append(float(intensity))
             sample_ID.append(input_file[9:-4])
-        d ={'wavelength': wv_list,
+        d ={'wavenumber': wv_list,
             'intensity': int_list,
             'sample_ID': sample_ID}
         ftir = pd.DataFrame(data = d)
@@ -56,19 +56,19 @@ for file in listdir():
 
 # plot use matplotlib.pyplot.subplots
 fig, ax = plt.subplots(figsize=(9, 4)) 
-ax.plot(ftir_df[ftir_df['sample_ID'] == 'OR-S-B3']['wavelength'],
+ax.plot(ftir_df[ftir_df['sample_ID'] == 'OR-S-B3']['wavenumber'],
          ftir_df[ftir_df['sample_ID'] == 'OR-S-B3']['intensity'],
          label = 'After sieving',
          color = 'C1', alpha = 0.5
          )
 
-ax.plot(ftir_df[ftir_df['sample_ID'] == 'OR-S-BC1']['wavelength'],
+ax.plot(ftir_df[ftir_df['sample_ID'] == 'OR-S-BC1']['wavenumber'],
          ftir_df[ftir_df['sample_ID'] == 'OR-S-BC1']['intensity']+2,
          label = 'After sieving, removing IC',
          color = 'C2', alpha = 0.5
          )
 
-ax.plot(ftir_df[ftir_df['sample_ID'] == 'OR-S-BCH2']['wavelength'],
+ax.plot(ftir_df[ftir_df['sample_ID'] == 'OR-S-BCH2']['wavenumber'],
          ftir_df[ftir_df['sample_ID'] == 'OR-S-BCH2']['intensity']+4,
          label = 'After sieving, removing IC, removing OC (NaOCl)',
          color = 'C4', alpha = 0.5
@@ -78,7 +78,7 @@ ax.text(2000, 4, 'After sieving, removing IC')
 ax.text(1650, 6.2, 'After sieving, removing IC, removing OC (NaOCl)')
 ax.set_ylim(1, 7.5)
 ax.get_yaxis().set_ticks([])    # make y-axis invisible, but can still plot labels
-ax.set_xlabel('wavelength (nm)')
+ax.set_xlabel('wavenumber ({})'.format(r'$cm^{-1}$'))
 ax.set_ylabel('intensity')
 ax.set_title('FTIR adsorption spectrum')
 #ax.legend()
@@ -87,19 +87,19 @@ fig.savefig('{}FTIR_result_20181101.pdf'.format(path[:-3]), bbox_inches = 'tight
 
 # plot use matplotlib.pyplot only
 plt.figure(figsize=(9,4))
-plt.plot(ftir_df[ftir_df['sample_ID'] == 'OR-S-B3']['wavelength'],
+plt.plot(ftir_df[ftir_df['sample_ID'] == 'OR-S-B3']['wavenumber'],
          ftir_df[ftir_df['sample_ID'] == 'OR-S-B3']['intensity'],
          label = 'After sieving',
          color = 'C1', alpha = 0.5
          )
 
-plt.plot(ftir_df[ftir_df['sample_ID'] == 'OR-S-BC1']['wavelength'],
+plt.plot(ftir_df[ftir_df['sample_ID'] == 'OR-S-BC1']['wavenumber'],
          ftir_df[ftir_df['sample_ID'] == 'OR-S-BC1']['intensity']+2,
          label = 'After sieving, removing IC',
          color = 'C2', alpha = 0.5
          )
 
-plt.plot(ftir_df[ftir_df['sample_ID'] == 'OR-S-BCH2']['wavelength'],
+plt.plot(ftir_df[ftir_df['sample_ID'] == 'OR-S-BCH2']['wavenumber'],
          ftir_df[ftir_df['sample_ID'] == 'OR-S-BCH2']['intensity']+4,
          label = 'After sieving, removing IC, removing OC (NaOCl)',
          color = 'C4', alpha = 0.5
@@ -109,7 +109,7 @@ plt.text(2000, 4, 'After sieving, removing IC')
 plt.text(1650, 6.2, 'After sieving, removing IC, removing OC (NaOCl)')
 plt.ylim(1, 7.5)
 plt.yticks([])      # make y-axis invisible, but can still plot labels
-plt.xlabel('wavelength (nm)')
+plt.xlabel('wavenumber ({})'.format(r'$cm^{-1}$'))
 plt.ylabel('intensity')
 plt.title('FTIR adsorption spectrum')
 
