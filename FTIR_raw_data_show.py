@@ -54,29 +54,30 @@ for file in listdir():
                 FTIR_convector(file)
                 )
 
-# plot use matplotlib.pyplot.subplots
+### plot using matplotlib.pyplot.subplots
 fig, ax = plt.subplots(figsize=(9, 4)) 
 ax.plot(ftir_df[ftir_df['sample_ID'] == 'OR-S-B3']['wavenumber'],
          ftir_df[ftir_df['sample_ID'] == 'OR-S-B3']['intensity'],
          label = 'After sieving',
-         color = 'C1', alpha = 0.5
+         color = 'C1', alpha = 0.5, linewidth = 1
          )
 
 ax.plot(ftir_df[ftir_df['sample_ID'] == 'OR-S-BC1']['wavenumber'],
          ftir_df[ftir_df['sample_ID'] == 'OR-S-BC1']['intensity']+2,
          label = 'After sieving, removing IC',
-         color = 'C2', alpha = 0.5
+         color = 'C2', alpha = 0.5, linewidth = 1
          )
 
 ax.plot(ftir_df[ftir_df['sample_ID'] == 'OR-S-BCH2']['wavenumber'],
          ftir_df[ftir_df['sample_ID'] == 'OR-S-BCH2']['intensity']+4,
          label = 'After sieving, removing IC, removing OC (NaOCl)',
-         color = 'C4', alpha = 0.5
+         color = 'C4', alpha = 0.5, linewidth = 1
          )
-ax.text(2200, 2, 'After sieving')
-ax.text(2000, 4, 'After sieving, removing IC')
-ax.text(1650, 6.2, 'After sieving, removing IC, removing OC (NaOCl)')
+ax.text(3000, 2, 'After sieving')
+ax.text(3500, 4, 'After sieving, removing IC')
+ax.text(3500, 6.2, 'After sieving, removing IC, removing OC (NaOCl)')
 ax.set_ylim(1, 7.5)
+ax.set_xlim(4100, 250)
 ax.get_yaxis().set_ticks([])    # make y-axis invisible, but can still plot labels
 ax.set_xlabel('wavenumber ({})'.format(r'$cm^{-1}$'))
 ax.set_ylabel('intensity')
@@ -85,29 +86,32 @@ ax.set_title('FTIR adsorption spectrum')
 fig.savefig('{}FTIR_result_20181101.pdf'.format(path[:-3]), bbox_inches = 'tight')  
 
 
-# plot use matplotlib.pyplot only
+
+
+### plot using matplotlib.pyplot only
 plt.figure(figsize=(9,4))
 plt.plot(ftir_df[ftir_df['sample_ID'] == 'OR-S-B3']['wavenumber'],
          ftir_df[ftir_df['sample_ID'] == 'OR-S-B3']['intensity'],
          label = 'After sieving',
-         color = 'C1', alpha = 0.5
+         color = 'C1', alpha = 0.5, linewidth = 1
          )
 
 plt.plot(ftir_df[ftir_df['sample_ID'] == 'OR-S-BC1']['wavenumber'],
          ftir_df[ftir_df['sample_ID'] == 'OR-S-BC1']['intensity']+2,
          label = 'After sieving, removing IC',
-         color = 'C2', alpha = 0.5
+         color = 'C2', alpha = 0.5, linewidth = 1
          )
 
 plt.plot(ftir_df[ftir_df['sample_ID'] == 'OR-S-BCH2']['wavenumber'],
          ftir_df[ftir_df['sample_ID'] == 'OR-S-BCH2']['intensity']+4,
          label = 'After sieving, removing IC, removing OC (NaOCl)',
-         color = 'C4', alpha = 0.5
+         color = 'C4', alpha = 0.5, linewidth = 1
          )
-plt.text(2200, 2, 'After sieving')
-plt.text(2000, 4, 'After sieving, removing IC')
-plt.text(1650, 6.2, 'After sieving, removing IC, removing OC (NaOCl)')
+plt.text(3000, 2, 'After sieving')
+plt.text(3500, 4, 'After sieving, removing IC')
+plt.text(3500, 6.2, 'After sieving, removing IC, removing OC (NaOCl)')
 plt.ylim(1, 7.5)
+plt.xlim(4100, 250)
 plt.yticks([])      # make y-axis invisible, but can still plot labels
 plt.xlabel('wavenumber ({})'.format(r'$cm^{-1}$'))
 plt.ylabel('intensity')
@@ -117,4 +121,32 @@ plt.savefig('{}FTIR_result_20181101.pdf'.format(path[:-3]), bbox_inches = 'tight
 
 print('''here I practice two plotting code which produce same figure.
       however, the subplots method will be useful when plotting multiple axes in a figure.''')
+
+### plot overlaping spectrum using matplotlib.pyplot.subplots
+fig, ax = plt.subplots(figsize=(9, 4)) 
+ax.plot(ftir_df[ftir_df['sample_ID'] == 'OR-S-B3']['wavenumber'],
+         ftir_df[ftir_df['sample_ID'] == 'OR-S-B3']['intensity'],
+         label = 'After sieving',
+         color = 'C1', alpha = 0.5, linewidth = 1
+         )
+
+ax.plot(ftir_df[ftir_df['sample_ID'] == 'OR-S-BC1']['wavenumber'],
+         ftir_df[ftir_df['sample_ID'] == 'OR-S-BC1']['intensity'],
+         label = 'After sieving, removing IC',
+         color = 'C2', alpha = 0.5, linewidth = 1
+         )
+
+ax.plot(ftir_df[ftir_df['sample_ID'] == 'OR-S-BCH2']['wavenumber'],
+         ftir_df[ftir_df['sample_ID'] == 'OR-S-BCH2']['intensity'],
+         label = 'After sieving, removing IC, removing OC (NaOCl)',
+         color = 'C4', alpha = 0.5, linewidth = 1
+         )
+
+ax.set_ylim(1, 4)
+ax.set_xlim(4100, 250)
+ax.set_xlabel('wavenumber ({})'.format(r'$cm^{-1}$'))
+ax.set_ylabel('intensity')
+ax.set_title('FTIR adsorption spectrum')
+ax.legend()
+fig.savefig('{}FTIR_overlape_result_20181101.pdf'.format(path[:-3]), bbox_inches = 'tight')  
 
