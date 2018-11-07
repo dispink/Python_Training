@@ -51,6 +51,9 @@ for file in listdir():
         ftir_df = ftir_df.append(
                 FTIR_convector(file)
                 )
+### output result
+ftir_df.to_csv('{}FTIR_result_20181101.csv'.format(path[:-3]), index = False)
+
 
 ### plot using matplotlib.pyplot.subplots
 fig, ax = plt.subplots(2, 1, figsize=(9, 8)) 
